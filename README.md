@@ -1,50 +1,154 @@
-# AI News Aggregator - Live Build Repository
+# AI News Aggregator
 
-This repository accompanies my 3-hour live coding session where I build a complete AI-powered news aggregator from scratch. This is a **private repository** containing valuable implementation details and deployment strategies used in production environments.
+An AI-powered news aggregation system that collects recent AI-related content, summarizes it, ranks it according to user preferences, and delivers a personalized newsletter through email.
+
+## Features
+
+* Collects AI news from:
+
+  * YouTube channels
+  * OpenAI articles
+  * Anthropic articles
+* Retrieves YouTube transcripts
+* Generates AI-powered summaries
+* Personalizes news ranking based on user interests and expertise
+* Creates a personalized email digest
+* Sends the newsletter through Gmail SMTP
+* Stores articles and summaries in PostgreSQL
+
+## Workflow
+
+```text
+News Sources
+    ↓
+Data Collection
+    ↓
+PostgreSQL Database
+    ↓
+YouTube Transcript Processing
+    ↓
+AI Summary Generation
+    ↓
+Personalized Article Ranking
+    ↓
+Email Digest Generation
+    ↓
+Gmail SMTP Delivery
+```
+
+## Technologies Used
+
+* **Python** – Main programming language
+* **OpenAI API** – Summarization, ranking, and email generation
+* **GPT-4o-mini** – Digest and email generation
+* **GPT-4.1** – Personalized article ranking
+* **PostgreSQL** – Database storage
+* **SQLAlchemy** – ORM for database operations
+* **BeautifulSoup** – Web scraping
+* **Feedparser** – RSS feed parsing
+* **YouTube Transcript API** – Fetching video transcripts
+* **Pydantic** – Structured and validated LLM outputs
+* **SMTP** – Email delivery
+
+## AI Components
+
+### DigestAgent
+
+Generates short, technically accurate summaries from articles and video transcripts.
+
+### CuratorAgent
+
+Ranks summaries based on:
+
+* User interests
+* Expertise level
+* Technical depth
+* Practical value
+* Novelty
+* Actionability
+
+### EmailAgent
+
+Creates a personalized newsletter containing the top-ranked articles, summaries, and links.
+
+## Database Tables
+
+* `youtube_videos`
+* `openai_articles`
+* `anthropic_articles`
+* `digests`
 
 ## Project Structure
 
-This project is organized across three branches, each corresponding to a different phase of the build:
+```text
+main.py
+app/
+├── agent/
+│   ├── curator_agent.py
+│   ├── digest_agent.py
+│   └── email_agent.py
+├── database/
+│   ├── connection.py
+│   ├── create_tables.py
+│   ├── models.py
+│   └── repository.py
+├── profiles/
+│   └── user_profile.py
+├── scrapers/
+│   ├── anthropic.py
+│   ├── openai.py
+│   └── youtube.py
+└── services/
+    ├── process_curator.py
+    ├── process_digest.py
+    ├── process_email.py
+    └── process_youtube.py
+```
 
-- **`master`** - Part 1: Local setup and core functionality
-- **`deployment`** - Part 2: Deployment configuration and infrastructure
-- **`deployment-final`** - Part 3: Final optimizations and production-ready changes
+## Running the Project
 
-Each branch serves as an intermediate checkpoint, allowing you to reference the exact state of the codebase at any point during the video.
+Install dependencies:
 
-## How This Video Works
+```bash
+pip install -r requirements.txt
+```
 
-This is a **live coding build**, not a traditional step-by-step tutorial. Here's what to expect:
+Run the pipeline:
 
-- **Fast-paced development** - I code at my natural pace, leveraging AI tools extensively
-- **AI-assisted workflow** - You won't see every code snippet or file generation in real-time
-- **Real-world approach** - This condenses 20-40 hours of learning into a single session
-- **Not cookie-cutter** - Unlike structured tutorials, this reflects how coding actually happens in practice
+```bash
+python main.py
+```
 
-## How to Follow Along
+Optional arguments:
 
-### Recommended Approach (Maximum Learning)
+```bash
+python main.py 24 10
+```
 
-1. **Clone this repository** before starting the video
-2. **Keep a local copy ready** on your system as you code along
-3. **Use intermediate checkpoints** - When I make major updates or run tests, pause and:
-   - Reference the corresponding branch in this repository
-   - Copy relevant code snippets into your project
-   - Use AI coding assistants to help you reach the same checkpoint
-4. **Iterate step-by-step** - Don't rush ahead. Ensure each phase works before moving forward
-5. **Expect confusion** - Some parts will move fast and may not be immediately clear. This is where real learning happens
+* `24` → collect news from the last 24 hours
+* `10` → generate a digest containing the top 10 articles
 
-### Alternative Approach (Not Recommended)
+## Environment Variables
 
-You can skip ahead to the `deployment-final` branch and try to get everything working, but you'll miss the iterative problem-solving process that makes this valuable.
+Create a `.env` file containing:
 
-## Why This Approach?
+```env
+OPENAI_API_KEY=your_openai_api_key
+MY_EMAIL=your_email
+APP_PASSWORD=your_gmail_app_password
+DATABASE_URL=your_database_url
+```
 
-Traditional tutorials show you the "right way" to do things. This video shows you the **real way** - with AI assistance, rapid iteration, debugging, and adapting on the fly. By following along and hitting the same checkpoints, you'll:
+## Future Improvements
 
-- Learn how to effectively leverage AI coding tools
-- Understand the thought process behind architectural decisions
-- Experience real-world development workflows
-- Build muscle memory through hands-on practice
+* Add a web dashboard
+* Support more news sources
+* Add duplicate-content detection
+* Improve ranking using embeddings
+* Add scheduled automatic execution
+* Add user login and multiple profiles
+* Deploy the application using Docker or cloud services
 
-**The most valuable learning happens when you struggle, reference the code, and push through to the next checkpoint.**
+## Project Objective
+
+The objective of this project is to reduce the time required to follow AI developments by automatically collecting, summarizing, personalizing, and delivering relevant AI news in one daily newsletter.
